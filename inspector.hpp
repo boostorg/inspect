@@ -59,12 +59,8 @@ namespace boost
       string_set m_signatures;
     };
 
-    inline string relative_to( const path & src_arg, const path & base_arg )
+    inline string relative_to( const path & src, const path & base )
     {
-      path src( src_arg );
-      src.normalize();
-      path base( base_arg );
-      base.normalize();
       string::size_type pos( base.string().size() );
       return src.string().substr(
         pos + ( pos < src.string().size() ? 1 : 0 ) );
