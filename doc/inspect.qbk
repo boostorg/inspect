@@ -35,7 +35,7 @@
 
 [section:intro Introduction]
 
-It is not uncommon for various common errors or [@http://beta.boost.org/development/requirements.html guideline violations] to creep into the Boost libraries. The inspect program detects and reports several common problems. It can be used to scan a proposed Boost submission to identify various failures.
+It is not uncommon for various common errors or [@http://www.boost.org/more/lib_guide.htm guideline violations] to creep into the Boost libraries. The inspect program detects and reports several common problems. It can be used to scan a proposed Boost submission to identify various failures.
 
 The inspect program is written in C++ to limit tool chain dependencies, and should be portable to any system.
 
