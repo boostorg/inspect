@@ -20,22 +20,37 @@ namespace
     "\\s*=\\s*(['\"])(.*?)\\1",
     boost::regbase::normal | boost::regbase::icase);
 
-  // Decode percent encoded characters, returns an empty string if there's an
-  // error.
+  // Decode percent encoded characters and html escapsed ampersands,
+  // returns an empty string if there's an error.
+  // The urls should really be fully HTML decoded at the beginning.
   std::string decode_url(std::string const& path) {
     std::string::size_type pos = 0, next;
     std::string result;
     result.reserve(path.length());
 
-    while((next = path.find('%', pos)) != std::string::npos) {
+    while((next = path.find_first_of("&%", pos)) != std::string::npos) {
       result.append(path, pos, next - pos);
-
-      if(path.length() - next < 3) return "";
-      char hex[3] = { path[next + 1], path[next + 2], '\0' };
-      char* end_ptr;
-      result += (char) std::strtol(hex, &end_ptr, 16);
-      if(*end_ptr) return "";
-      pos = next + 3;
+      pos = next;
+      switch(path[pos]) {
+        case '%': {
+          if(path.length() - next < 3) return "";
+          char hex[3] = { path[next + 1], path[next + 2], '\0' };
+          char* end_ptr;
+          result += (char) std::strtol(hex, &end_ptr, 16);
+          if(*end_ptr) return "";
+          pos = next + 3;
+          break;
+        }
+        case '&': {
+          if(path.substr(pos, 5) == "&amp;") {
+            result += '&'; pos += 5;
+          }
+          else {
+            result += '&'; pos += 1;
+          }
+          break;
+        }
+      }
     }
 
     result.append(path, pos, path.length());
