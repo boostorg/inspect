@@ -127,6 +127,12 @@ namespace boost
       const path & source_path, bool no_link_errors )
         // precondition: source_path.is_complete()
     {
+      if(url.empty()) {
+        ++m_invalid_errors;
+        error( library_name, source_path, string(name()) + " empty URL." );
+        return;
+      }
+    
       boost::smatch m;
       if(!boost::regex_match(url, m, url_decompose_regex)) {
         if(!no_link_errors) {
@@ -150,10 +156,13 @@ namespace boost
       // Protocol checks
       if(scheme_matched) {
         if(scheme == "http" || scheme == "https") {
+          // All http links should have a hostname. Generally if they don't
+          // it's by mistake. If they shouldn't, then a protocol isn't
+          // required.
           if(!authority_matched) {
             if(!no_link_errors) {
               ++m_invalid_errors;
-              error( library_name, source_path, string(name()) + " http protocol without hostname: " + url );
+              error( library_name, source_path, string(name()) + " no hostname: " + url );
             }
           }
 
