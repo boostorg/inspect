@@ -15,7 +15,6 @@
 #include <string>
 #include <algorithm>
 #include <cctype>
-#include <cstring>
 
 using std::string;
 
