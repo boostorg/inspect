@@ -52,7 +52,8 @@ namespace boost
       }
 
       //  allowable initial character
-      if ( std::strchr( initial_char, leaf[0] ) == 0 )
+      if ( std::strchr( initial_char, leaf[0] ) == 0 &&
+              leaf.substr(0,4) != ".git" )
       {
         ++m_name_errors;
         error( library_name, full_path, string(name())
