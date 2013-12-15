@@ -232,15 +232,11 @@ namespace
       // no point in checking doxygen xml output
       && local.find("doc/xml") != 0
       && local.find("doc\\xml") != 0
-      // ignore some web files
-      && leaf != ".htaccess"
       // ignore svn files:
       && leaf != ".svn"
       // ignore other version control files
       && leaf != ".git"
       && leaf != ".bzr"
-      // ignore OS X directory info files:
-      && leaf != ".DS_Store"
       // ignore if tag file present
       && !boost::filesystem::exists(pth / boost_no_inspect)
       ;
