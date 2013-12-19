@@ -75,6 +75,8 @@ using namespace boost::inspect;
 
 namespace
 {
+  fs::path search_root = fs::initial_path();
+  
   class inspector_element
   {
     typedef boost::shared_ptr< boost::inspect::inspector > inspector_ptr;
@@ -221,7 +223,7 @@ namespace
 
   bool visit_predicate( const path & pth )
   {
-    string local( boost::inspect::relative_to( pth, fs::initial_path() ) );
+    string local( boost::inspect::relative_to( pth, search_root_path() ) );
     string leaf( pth.leaf().string() );
     return
       // so we can inspect a checkout
@@ -687,6 +689,12 @@ namespace boost
       return display_format ? "\n" : "<br>\n";
     }
 
+//  search_root_path  --------------------------------------------------------//
+
+    path search_root_path()
+    {
+      return search_root;
+    }
 
 //  register_signature  ------------------------------------------------------//
 
@@ -704,7 +712,7 @@ namespace boost
       ++error_count;
       error_msg err_msg;
       err_msg.library = library_name;
-      err_msg.rel_path = relative_to( full_path, fs::initial_path() );
+      err_msg.rel_path = relative_to( full_path, search_root_path() );
       err_msg.msg = msg;
       err_msg.line_number = line_number;
       msgs.push_back( err_msg );
@@ -775,7 +783,7 @@ namespace boost
     // may return an empty string [gps]
     string impute_library( const path & full_dir_path )
     {
-      path relative( relative_to( full_dir_path, fs::initial_path() ) );
+      path relative( relative_to( full_dir_path, search_root_path() ) );
       if ( relative.empty() ) return "boost-root";
       string first( (*relative.begin()).string() );
       string second =  // borland 5.61 requires op=
@@ -809,7 +817,8 @@ int cpp_main( int argc_param, char * argv_param[] )
   if ( argc > 1 && (std::strcmp( argv[1], "-help" ) == 0
     || std::strcmp( argv[1], "--help" ) == 0 ) )
   {
-    std::clog << "Usage: inspect [-cvs] [-text] [-brief] [options...]\n\n"
+    std::clog << "Usage: inspect [search-root] [-cvs] [-text] [-brief] [options...]\n\n"
+      " search-root default is the current directory\n\n"
       " Options:\n"
       << options() << '\n';
     return 0;
@@ -829,6 +838,12 @@ int cpp_main( int argc_param, char * argv_param[] )
   bool minmax_ck = true;
   bool unnamed_ck = true;
   bool cvs = false;
+
+  if ( argc > 1 && *argv[1] != '-' )
+  {
+    search_root = fs::absolute(argv[1], fs::initial_path());
+    --argc; ++argv;
+  }
 
   if ( argc > 1 && std::strcmp( argv[1], "-cvs" ) == 0 )
   {
@@ -907,8 +922,6 @@ int cpp_main( int argc_param, char * argv_param[] )
   }
 
   string inspector_keys;
-  fs::initial_path();
-  
 
   { // begin reporting block
 
@@ -946,11 +959,11 @@ int cpp_main( int argc_param, char * argv_param[] )
 
   // perform the actual inspection, using the requested type of iteration
   if ( cvs )
-    visit_all<hack::cvs_iterator>( "boost-root",
-      fs::initial_path(), inspectors );
+    visit_all<hack::cvs_iterator>( "search-root",
+      search_root, inspectors );
   else
-    visit_all<fs::directory_iterator>( "boost-root",
-      fs::initial_path(), inspectors );
+    visit_all<fs::directory_iterator>( "search-root",
+      search_root, inspectors );
 
   // close
   for ( inspector_list::iterator itr = inspectors.begin();
@@ -1014,7 +1027,7 @@ int cpp_main( int argc_param, char * argv_param[] )
       ;
     std::cout
       << "<p>The files checked were from "
-      << info( fs::initial_path() )
+      << info( search_root_path() )
       << ".</p>\n";
 
 
