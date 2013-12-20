@@ -59,7 +59,7 @@ const char* boost_no_inspect = "boost-" "no-inspect";
 #include "minmax_check.hpp"
 #include "unnamed_namespace_check.hpp"
 
-#include "cvs_iterator.hpp"
+//#include "cvs_iterator.hpp"
 
 #if !defined(INSPECT_USE_BOOST_TEST)
 #define INSPECT_USE_BOOST_TEST 0
@@ -225,8 +225,11 @@ namespace
   {
     string local( boost::inspect::relative_to( pth, search_root_path() ) );
     string leaf( pth.leaf().string() );
+    if (leaf[0] == '.')  // ignore hidden by convention directories such as
+      return false;      //  .htaccess, .git, .svn, .bzr, .DS_Store, etc.
+     
     return
-      // so we can inspect a checkout
+      // so we can inspect a CVS checkout
       leaf != "CVS"
       // don't look at binaries
       && leaf != "bin"
@@ -234,15 +237,6 @@ namespace
       // no point in checking doxygen xml output
       && local.find("doc/xml") != 0
       && local.find("doc\\xml") != 0
-      // ignore some web files
-      && leaf != ".htaccess"
-      // ignore svn files:
-      && leaf != ".svn"
-      // ignore other version control files
-      && leaf != ".git"
-      && leaf != ".bzr"
-      // ignore OS X directory info files:
-      && leaf != ".DS_Store"
       // ignore if tag file present
       && !boost::filesystem::exists(pth / boost_no_inspect)
       ;
@@ -332,7 +326,6 @@ namespace
 
     for ( DirectoryIterator itr( dir_path ); itr != end_itr; ++itr )
     {
-
       if ( fs::is_directory( *itr ) )
       {
         if ( visit_predicate( *itr ) )
@@ -342,7 +335,7 @@ namespace
           visit_all<DirectoryIterator>( cur_lib, *itr, insps );
         }
       }
-      else
+      else if (itr->path().leaf().string()[0] != '.') // ignore if hidden
       {
         ++file_count;
         string content;
@@ -817,8 +810,9 @@ int cpp_main( int argc_param, char * argv_param[] )
   if ( argc > 1 && (std::strcmp( argv[1], "-help" ) == 0
     || std::strcmp( argv[1], "--help" ) == 0 ) )
   {
-    std::clog << "Usage: inspect [search-root] [-cvs] [-text] [-brief] [options...]\n\n"
-      " search-root default is the current directory\n\n"
+    //std::clog << "Usage: inspect [search-root] [-cvs] [-text] [-brief] [options...]\n\n"
+    std::clog << "Usage: inspect [search-root] [-text] [-brief] [options...]\n\n"
+      " search-root default is the current directory (i.e. '.')\n\n"
       " Options:\n"
       << options() << '\n';
     return 0;
@@ -837,19 +831,19 @@ int cpp_main( int argc_param, char * argv_param[] )
   bool deprecated_ck = true;
   bool minmax_ck = true;
   bool unnamed_ck = true;
-  bool cvs = false;
+  //bool cvs = false;
 
   if ( argc > 1 && *argv[1] != '-' )
   {
-    search_root = fs::absolute(argv[1], fs::initial_path());
+    search_root = fs::canonical(fs::absolute(argv[1], fs::initial_path()));
     --argc; ++argv;
   }
 
-  if ( argc > 1 && std::strcmp( argv[1], "-cvs" ) == 0 )
-  {
-    cvs = true;
-    --argc; ++argv;
-  }
+  //if ( argc > 1 && std::strcmp( argv[1], "-cvs" ) == 0 )
+  //{
+  //  cvs = true;
+  //  --argc; ++argv;
+  //}
 
   if ( argc > 1 && std::strcmp( argv[1], "-text" ) == 0 )
   {
@@ -957,12 +951,12 @@ int cpp_main( int argc_param, char * argv_param[] )
   if ( unnamed_ck )
       inspectors.push_back( inspector_element( new boost::inspect::unnamed_namespace_check ) );
 
-  // perform the actual inspection, using the requested type of iteration
-  if ( cvs )
-    visit_all<hack::cvs_iterator>( "search-root",
-      search_root, inspectors );
-  else
-    visit_all<fs::directory_iterator>( "search-root",
+  //// perform the actual inspection, using the requested type of iteration
+  //if ( cvs )
+  //  visit_all<hack::cvs_iterator>( search_root.leaf().string(),
+  //    search_root, inspectors );
+  //else
+    visit_all<fs::directory_iterator>( search_root.leaf().string(),
       search_root, inspectors );
 
   // close
