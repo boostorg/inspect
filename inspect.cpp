@@ -977,7 +977,7 @@ int cpp_main( int argc_param, char * argv_param[] )
         "Run Date: " << run_date  << "\n"
         "\n"
         "An inspection program <http://www.boost.org/tools/inspect/index.html>\n"
-        "checks each file in the current Boost CVS for various problems,\n"
+        "checks directories and files for various problems,\n"
         "generating an HTML page as output.\n"
         "\n"
       ;
@@ -1093,5 +1093,5 @@ int cpp_main( int argc_param, char * argv_param[] )
       "</html>\n";
   }
 
-  return 0;
+  return error_count ? 1 : 0;
 }
