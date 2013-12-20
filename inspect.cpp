@@ -365,7 +365,7 @@ namespace
 
   void display_summary_helper( const string & current_library, int err_count )
   {
-    if (display_text == display_format)
+    if (display_format == display_text)
     {
         std::cout << "  " << current_library << " (" << err_count << ")\n";
     }
@@ -384,7 +384,7 @@ namespace
 
   void display_summary()
   {
-    if (display_text == display_format)
+    if (display_format == display_text)
     {
       std::cout << "Summary:\n";
     }
@@ -411,7 +411,7 @@ namespace
     }
     display_summary_helper( current_library, err_count );
 
-    if (display_text == display_format)
+    if (display_format == display_text)
       std::cout << "\n";
     else
       std::cout << "</blockquote>\n"; 
@@ -448,7 +448,7 @@ namespace
 
   void display_details()
   {
-    if (display_text == display_format)
+    if (display_format == display_text)
     {
       // display error messages with group indication
       error_msg current;
@@ -587,7 +587,9 @@ namespace
 
   void display_worst_offenders()
   {
-    if (display_text == display_format)
+    if (display_mode == display_brief)
+      return;
+    if (display_format == display_text)
     {
       std::cout << "Worst Offenders:\n";
     }
@@ -607,7 +609,7 @@ namespace
                 || itr->error_count == last_error_count);
           ++itr, ++display_count )
     {
-      if (display_text == display_format)
+      if (display_format == display_text)
       {
         std::cout << itr->library << " " << itr->error_count << "\n";
       }
@@ -623,7 +625,7 @@ namespace
       last_error_count = itr->error_count;
     }
 
-    if (display_text == display_format)
+    if (display_format == display_text)
       std::cout << "\n";
     else
       std::cout << "</blockquote>\n"; 
@@ -969,16 +971,12 @@ int cpp_main( int argc_param, char * argv_param[] )
   string run_date ( "n/a" );
   boost::time_string( run_date );
 
-  if (display_text == display_format)
+  if (display_format == display_text)
   {
     std::cout
       <<
         "Boost Inspection Report\n"
         "Run Date: " << run_date  << "\n"
-        "\n"
-        "An inspection program <http://www.boost.org/tools/inspect/index.html>\n"
-        "checks directories and files for various problems,\n"
-        "generating an HTML page as output.\n"
         "\n"
       ;
 
@@ -1043,14 +1041,14 @@ int cpp_main( int argc_param, char * argv_param[] )
         ;
   }
 
-  if (display_text == display_format)
+  if (display_format == display_text)
      std::cout << "\nProblem counts:\n";
   else
     std::cout << "\n<h2>Problem counts</h2>\n<blockquote><p>\n" ;
 
   } // end of block: starts reporting
 
-  if (display_text == display_format)
+  if (display_format == display_text)
     std::cout << "\n" ;
   else
     std::cout << "</blockquote>\n";
@@ -1060,14 +1058,14 @@ int cpp_main( int argc_param, char * argv_param[] )
   worst_offenders_count();
   std::stable_sort( libs.begin(), libs.end() );
 
-  if ( !libs.empty() )
+  if ( !libs.empty() && display_mode != display_brief)
     display_worst_offenders();
 
   if ( !msgs.empty() )
   {
     display_summary();
 
-    if (display_text == display_format)
+    if (display_format == display_text)
     {
       std::cout << "Details:\n" << inspector_keys;
       std::cout << "\nDirectories with a file named \"" << boost_no_inspect << "\" will not be inspected.\n"
@@ -1082,7 +1080,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     display_details();
   }
 
-  if (display_text == display_format)
+  if (display_format == display_text)
   {
     std::cout << "\n\n" ;
   }

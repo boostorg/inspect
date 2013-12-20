@@ -66,7 +66,7 @@
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
     <PostBuildEvent>
-      <Command>"$(TargetDir)\$(TargetName).exe" ../..</Command>
+      <Command>"$(TargetDir)\$(TargetName).exe" ../.. -text -brief</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>Executing test $(TargetName).exe...</Message>
