@@ -91,8 +91,8 @@ namespace boost
    deprecated_macro_check::deprecated_macro_check()
      : m_files_with_errors(0)
      , m_from_boost_root(
-         fs::exists(fs::initial_path() / "boost") &&
-         fs::exists(fs::initial_path() / "libs"))
+         fs::exists(search_root_path() / "boost") &&
+         fs::exists(search_root_path() / "libs"))
    {
      register_signature( ".c" );
      register_signature( ".cpp" );
