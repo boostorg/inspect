@@ -7,6 +7,16 @@
 
 #include "copyright_check.hpp"
 
+namespace
+{
+  const char* copyright[] = {
+    "(C)", "(c)",
+    "Copyright",
+    "copyright",
+    NULL
+  };
+} // unnamed namespace
+
 namespace boost
 {
   namespace inspect
@@ -22,12 +32,13 @@ namespace boost
     {
       if (contents.find( "boostinspect:" "nocopyright" ) != string::npos) return;
 
-      if ( contents.find( "Copyright" ) == string::npos
-        && contents.find( "copyright" ) == string::npos )
+      for (const char** ptr = copyright; *ptr; ++ptr)
       {
-        ++m_files_with_errors;
-        error( library_name, full_path, name() );
+        if (contents.find( *ptr ) != string::npos) return;
       }
+
+      ++m_files_with_errors;
+      error( library_name, full_path, name() );
     }
   } // namespace inspect
 } // namespace boost
