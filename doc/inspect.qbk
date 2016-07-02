@@ -56,6 +56,7 @@ Usage: inspect \[search-root\] \[options...\]
 
   -brief
   -text
+  -version-string <version message>
 
  Checks:
 
@@ -86,6 +87,9 @@ There are two types of options allowed, ones that control general operation and 
 
   [ [[^-brief]]
     [The default report style can be rather verobse. This generates a more condesed report, for example suitable to send as an email.] ]
+
+  [ [[^-version-string]]
+    [Description of the version of boost that is being inspected.] ]
 
   [ [[^-license]]
     [Checks for presense of approved license text.] ]
