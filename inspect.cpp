@@ -631,6 +631,11 @@ namespace
   const char * options()
   {
     return
+         " Output Options:\n\n"
+         "  -brief\n"
+         "  -text\n"
+         "\n"
+         " Checks:\n\n"
          "  -license\n"
          "  -copyright\n"
          "  -crlf\n"
@@ -808,9 +813,8 @@ int cpp_main( int argc_param, char * argv_param[] )
   if ( argc > 1 && (std::strcmp( argv[1], "-help" ) == 0
     || std::strcmp( argv[1], "--help" ) == 0 ) )
   {
-    std::clog << "Usage: inspect [search-root] [-text] [-brief] [options...]\n\n"
+    std::clog << "Usage: inspect [search-root] [options...]\n\n"
       " search-root default is the current directory (i.e. '.')\n\n"
-      " Options:\n"
       << options() << '\n';
     return 0;
   }
@@ -833,18 +837,6 @@ int cpp_main( int argc_param, char * argv_param[] )
   if ( argc > 1 && *argv[1] != '-' )
   {
     search_root = fs::canonical(fs::absolute(argv[1], fs::initial_path()));
-    --argc; ++argv;
-  }
-
-  if ( argc > 1 && std::strcmp( argv[1], "-text" ) == 0 )
-  {
-    display_format = display_text;
-    --argc; ++argv;
-  }
-
-  if ( argc > 1 && std::strcmp( argv[1], "-brief" ) == 0 )
-  {
-    display_mode = display_brief;
     --argc; ++argv;
   }
 
@@ -902,6 +894,14 @@ int cpp_main( int argc_param, char * argv_param[] )
     else if ( std::strcmp( argv[1], "-unnamed" ) == 0 ) {
         options_not_set = false;
         unnamed_ck = true;
+    }
+    else if ( argc > 1 && std::strcmp( argv[1], "-text" ) == 0 )
+    {
+      display_format = display_text;
+    }
+    else if ( argc > 1 && std::strcmp( argv[1], "-brief" ) == 0 )
+    {
+      display_mode = display_brief;
     }
     else
     {
