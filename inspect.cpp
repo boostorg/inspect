@@ -9,7 +9,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 //  This program recurses through sub-directories looking for various problems.
-//  It contains some Boost specific features, like ignoring "CVS" and "bin",
+//  It contains some Boost specific features, like ignoring "bin",
 //  and the code that identifies library names assumes the Boost directory
 //  structure.
 
@@ -58,8 +58,6 @@ const char* boost_no_inspect = "boost-" "no-inspect";
 #include "deprecated_macro_check.hpp"
 #include "minmax_check.hpp"
 #include "unnamed_namespace_check.hpp"
-
-//#include "cvs_iterator.hpp"
 
 #if !defined(INSPECT_USE_BOOST_TEST)
 #define INSPECT_USE_BOOST_TEST 0
@@ -229,10 +227,8 @@ namespace
       return false;      //  .htaccess, .git, .svn, .bzr, .DS_Store, etc.
      
     return
-      // so we can inspect a CVS checkout
-      leaf != "CVS"
       // don't look at binaries
-      && leaf != "bin"
+      leaf != "bin"
       && leaf != "bin.v2"
       // no point in checking doxygen xml output
       && local.find("doc/xml") != 0
@@ -812,7 +808,6 @@ int cpp_main( int argc_param, char * argv_param[] )
   if ( argc > 1 && (std::strcmp( argv[1], "-help" ) == 0
     || std::strcmp( argv[1], "--help" ) == 0 ) )
   {
-    //std::clog << "Usage: inspect [search-root] [-cvs] [-text] [-brief] [options...]\n\n"
     std::clog << "Usage: inspect [search-root] [-text] [-brief] [options...]\n\n"
       " search-root default is the current directory (i.e. '.')\n\n"
       " Options:\n"
@@ -833,19 +828,12 @@ int cpp_main( int argc_param, char * argv_param[] )
   bool deprecated_ck = true;
   bool minmax_ck = true;
   bool unnamed_ck = true;
-  //bool cvs = false;
 
   if ( argc > 1 && *argv[1] != '-' )
   {
     search_root = fs::canonical(fs::absolute(argv[1], fs::initial_path()));
     --argc; ++argv;
   }
-
-  //if ( argc > 1 && std::strcmp( argv[1], "-cvs" ) == 0 )
-  //{
-  //  cvs = true;
-  //  --argc; ++argv;
-  //}
 
   if ( argc > 1 && std::strcmp( argv[1], "-text" ) == 0 )
   {
@@ -953,11 +941,6 @@ int cpp_main( int argc_param, char * argv_param[] )
   if ( unnamed_ck )
       inspectors.push_back( inspector_element( new boost::inspect::unnamed_namespace_check ) );
 
-  //// perform the actual inspection, using the requested type of iteration
-  //if ( cvs )
-  //  visit_all<hack::cvs_iterator>( search_root.leaf().string(),
-  //    search_root, inspectors );
-  //else
     visit_all<fs::directory_iterator>( search_root.leaf().string(),
       search_root, inspectors );
 

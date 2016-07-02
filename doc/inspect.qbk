@@ -48,7 +48,7 @@ The program is run in the directory to be scanned for errors. Sub-directories ar
 If the first program argument is -help, a usage message is displayed, showing all available program options:
 
 [pre
-Usage: inspect \[search-root\] \[-cvs\] \[-text\] \[-brief\] \[options...\]
+Usage: inspect \[search-root\] \[-text\] \[-brief\] \[options...\]
  search-root default is the current directory
  Options:
   -license
@@ -72,9 +72,6 @@ Usage: inspect \[search-root\] \[-cvs\] \[-text\] \[-brief\] \[options...\]
 There are two types of options allowed, ones that control general operation and kind of output produced, and the ones that indicate the checks to perform.
 
 [variablelist
-
-  [ [[^-cvs]]
-    [Only files and directories in the CVS tree of the current directory are scanned. Otherwise all files and sub-directories are included in the scan.] ]
 
   [ [[^-text]]
     [Generate plain text report instead of the default HTML.] ]
