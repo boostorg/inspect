@@ -815,19 +815,20 @@ int cpp_main( int argc_param, char * argv_param[] )
     return 0;
   }
 
-  bool license_ck = true;
-  bool copyright_ck = true;
-  bool crlf_ck = true;
-  bool end_ck = true;
-  bool link_ck = true;
-  bool path_name_ck = true;
-  bool tab_ck = true;
-  bool ascii_ck = true;
-  bool apple_ck = true;
-  bool assert_ck = true;
-  bool deprecated_ck = true;
-  bool minmax_ck = true;
-  bool unnamed_ck = true;
+  bool options_not_set = true;
+  bool license_ck = false;
+  bool copyright_ck = false;
+  bool crlf_ck = false;
+  bool end_ck = false;
+  bool link_ck = false;
+  bool path_name_ck = false;
+  bool tab_ck = false;
+  bool ascii_ck = false;
+  bool apple_ck = false;
+  bool assert_ck = false;
+  bool deprecated_ck = false;
+  bool minmax_ck = false;
+  bool unnamed_ck = false;
 
   if ( argc > 1 && *argv[1] != '-' )
   {
@@ -847,52 +848,61 @@ int cpp_main( int argc_param, char * argv_param[] )
     --argc; ++argv;
   }
 
-  if ( argc > 1 && *argv[1] == '-' )
-  {
-    license_ck = false;
-    copyright_ck = false;
-    crlf_ck = false;
-    end_ck = false;
-    link_ck = false;
-    path_name_ck = false;
-    tab_ck = false;
-    ascii_ck = false;
-    apple_ck = false;
-    assert_ck = false;
-    deprecated_ck = false;
-    minmax_ck = false;
-    unnamed_ck = false;
-  }
-
   bool invalid_options = false;
   for(; argc > 1; --argc, ++argv )
   {
-    if ( std::strcmp( argv[1], "-license" ) == 0 )
+    if ( std::strcmp( argv[1], "-license" ) == 0 ) {
+      options_not_set = false;
       license_ck = true;
-    else if ( std::strcmp( argv[1], "-copyright" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-copyright" ) == 0 ) {
+      options_not_set = false;
       copyright_ck = true;
-    else if ( std::strcmp( argv[1], "-crlf" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-crlf" ) == 0 ) {
+        options_not_set = false;
         crlf_ck = true;
-    else if ( std::strcmp( argv[1], "-end" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-end" ) == 0 ) {
+        options_not_set = false;
         end_ck = true;
-    else if ( std::strcmp( argv[1], "-link" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-link" ) == 0 ) {
+      options_not_set = false;
       link_ck = true;
-    else if ( std::strcmp( argv[1], "-path_name" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-path_name" ) == 0 ) {
+      options_not_set = false;
       path_name_ck = true;
-    else if ( std::strcmp( argv[1], "-tab" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-tab" ) == 0 ) {
+      options_not_set = false;
       tab_ck = true;
-    else if ( std::strcmp( argv[1], "-ascii" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-ascii" ) == 0 ) {
+      options_not_set = false;
       ascii_ck = true;
-    else if ( std::strcmp( argv[1], "-apple_macro" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-apple_macro" ) == 0 ) {
+      options_not_set = false;
       apple_ck = true;
-    else if ( std::strcmp( argv[1], "-assert_macro" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-assert_macro" ) == 0 ) {
+      options_not_set = false;
       assert_ck = true;
-    else if ( std::strcmp( argv[1], "-deprecated_macro" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-deprecated_macro" ) == 0 ) {
+      options_not_set = false;
       deprecated_ck = true;
-    else if ( std::strcmp( argv[1], "-minmax" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-minmax" ) == 0 ) {
+        options_not_set = false;
         minmax_ck = true;
-    else if ( std::strcmp( argv[1], "-unnamed" ) == 0 )
+    }
+    else if ( std::strcmp( argv[1], "-unnamed" ) == 0 ) {
+        options_not_set = false;
         unnamed_ck = true;
+    }
     else
     {
       std::cerr << "unknown option: " << argv[1] << '\n';
@@ -903,6 +913,22 @@ int cpp_main( int argc_param, char * argv_param[] )
       std::cerr << "\nvalid options are:\n"
                 << options();
       return 1;
+  }
+
+  if (options_not_set) {
+    license_ck = true;
+    copyright_ck = true;
+    crlf_ck = true;
+    end_ck = true;
+    link_ck = true;
+    path_name_ck = true;
+    tab_ck = true;
+    ascii_ck = true;
+    apple_ck = true;
+    assert_ck = true;
+    deprecated_ck = true;
+    minmax_ck = true;
+    unnamed_ck = true;
   }
 
   string inspector_keys;
