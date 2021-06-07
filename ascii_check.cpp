@@ -9,6 +9,7 @@
 //  √ -- this is a test.
 
 #include "ascii_check.hpp"
+#include <algorithm>
 
 namespace boost
 {
