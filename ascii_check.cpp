@@ -10,6 +10,8 @@
 
 #include "ascii_check.hpp"
 
+#include <algorithm>
+
 namespace boost
 {
   namespace inspect
