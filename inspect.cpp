@@ -30,6 +30,7 @@ const char* boost_no_inspect = "boost-" "no-inspect";
 #include "boost/lexical_cast.hpp"
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/fstream.hpp"
+#include "boost/filesystem/directory.hpp"
 
 #include <stdio.h>  // for popen, pclose
 #if defined(_MSC_VER)
@@ -137,7 +138,7 @@ namespace
   bool visit_predicate( const path & pth )
   {
     string local( boost::inspect::relative_to( pth, search_root_path() ) );
-    string leaf( pth.leaf().string() );
+    string leaf( pth.filename().string() );
     if (leaf[0] == '.')  // ignore hidden by convention directories such as
       return false;      //  .htaccess, .git, .svn, .bzr, .DS_Store, etc.
      
@@ -184,7 +185,7 @@ namespace
   bool find_signature( const path & file_path,
     const boost::inspect::string_set & signatures )
   {
-    string name( file_path.leaf().string() );
+    string name( file_path.filename().string() );
     if ( signatures.find( name ) == signatures.end() )
     {
       string::size_type pos( name.rfind( '.' ) );
@@ -246,7 +247,7 @@ namespace
           visit_all<DirectoryIterator>( cur_lib, *itr, insps );
         }
       }
-      else if (itr->path().leaf().string()[0] != '.') // ignore if hidden
+      else if (itr->path().filename().string()[0] != '.') // ignore if hidden
       {
         ++file_count;
         string content;
@@ -386,11 +387,11 @@ namespace
           {
             path current_rel_path(current.rel_path);
             path this_rel_path(itr->rel_path);
-            if (current_rel_path.branch_path() != this_rel_path.branch_path())
+            if (current_rel_path.parent_path() != this_rel_path.parent_path())
             {
-              std::cout << "\n  " << this_rel_path.branch_path().string() << '/';
+              std::cout << "\n  " << this_rel_path.parent_path().string() << '/';
             }
-            std::cout << "\n    " << this_rel_path.leaf() << ':';
+            std::cout << "\n    " << this_rel_path.filename() << ':';
           }
         }
         if ( current.library != itr->library
@@ -895,7 +896,7 @@ int cpp_main( int argc_param, char * argv_param[] )
   if ( unnamed_ck )
       inspectors.push_back( inspector_element( new boost::inspect::unnamed_namespace_check ) );
 
-    visit_all<fs::directory_iterator>( search_root.leaf().string(),
+    visit_all<fs::directory_iterator>( search_root.filename().string(),
       search_root, inspectors );
 
   // close

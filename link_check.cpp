@@ -9,6 +9,7 @@
 #include "link_check.hpp"
 #include "boost/regex.hpp"
 #include "boost/filesystem/operations.hpp"
+#include "boost/filesystem/exception.hpp"
 #include <boost/algorithm/string/case_conv.hpp>
 #include <cstdlib>
 #include <set>
@@ -424,7 +425,7 @@ namespace boost
       // url is relative source_path.branch()
       // convert to target_path, which is_complete()
       path target_path;
-      try { target_path = source_path.branch_path() /= path( decoded_path ); }
+      try { target_path = source_path.parent_path() /= path( decoded_path ); }
       catch ( const fs::filesystem_error & )
       {
         if(!no_link_errors) {
