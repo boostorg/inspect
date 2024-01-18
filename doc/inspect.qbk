@@ -92,7 +92,7 @@ There are two types of options allowed, ones that control general operation and 
     [Description of the version of boost that is being inspected.] ]
 
   [ [[^-license]]
-    [Checks for presense of approved license text.] ]
+    [Checks for presence of approved license text.] ]
 
   [ [[^-copyright]]
     [Checks that files are copyright assigned to someone.] ]
