@@ -21,11 +21,11 @@ jobs:
             toolset: gcc
           - os: ubuntu-22.04
             toolset: gcc
-          - os: macos-11
-            toolset: clang
-          - os: macos-12
-            toolset: clang
           - os: macos-13
+            toolset: clang
+          - os: macos-14
+            toolset: clang
+          - os: macos-15
             toolset: clang
 
     runs-on: ${{matrix.os}}
