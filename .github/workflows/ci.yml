@@ -111,6 +111,8 @@ jobs:
           git clone -b %BOOST_BRANCH% --depth 1 https://github.com/boostorg/boost.git boost-root
           cd boost-root
           xcopy /s /e /q %GITHUB_WORKSPACE% tools\inspect\
+          git submodule update --init tools/boostdep
+          python tools/boostdep/depinst/depinst.py --git_args "--jobs 3" ../tools/inspect
           cmd /c bootstrap
           b2 -d0 headers
 
