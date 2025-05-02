@@ -21,11 +21,11 @@ jobs:
             toolset: gcc
           - os: ubuntu-22.04
             toolset: gcc
-          - os: macos-11
-            toolset: clang
-          - os: macos-12
-            toolset: clang
           - os: macos-13
+            toolset: clang
+          - os: macos-14
+            toolset: clang
+          - os: macos-15
             toolset: clang
 
     runs-on: ${{matrix.os}}
@@ -77,7 +77,7 @@ jobs:
       - name: Build tool
         run: |
           cd ../boost-root
-          ./b2 -j3 tools/inspect/build toolset=${{matrix.toolset}}
+          ./b2 -j3 tools/inspect//all toolset=${{matrix.toolset}}
 
   windows:
     strategy:
@@ -120,4 +120,4 @@ jobs:
         shell: cmd
         run: |
           cd ../boost-root
-          b2 -j3 tools/inspect/build toolset=${{matrix.toolset}} embed-manifest-via=linker
+          b2 -j3 tools/inspect//all toolset=${{matrix.toolset}} embed-manifest-via=linker
