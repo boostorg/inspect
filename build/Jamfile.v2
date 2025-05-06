@@ -37,9 +37,4 @@ exe inspect
 
 # For backwards compatibility with processes that haven't changed to use
 # the top-level install targets.
-explicit
-    [ install dist-bin
-        : inspect/<link>static
-        : <install-type>EXE <location>$(DIST_DIR)/bin
-        : release ]
-    ;
+explicit [ alias dist-bin : /boost/inspect//dist-bin ] ;
