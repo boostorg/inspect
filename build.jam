@@ -1,4 +1,4 @@
-# Copyright René Ferdinand Rivera Morell 2024
+# Copyright René Ferdinand Rivera Morell 2024-2025
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at
 # http://www.boost.org/LICENSE_1_0.txt)
@@ -15,14 +15,13 @@ local .DIST_DIR = [ option.get distdir ] ;
 path-constant DIST_DIR : $(.DIST_DIR) ;
 
 project /boost/inspect
-    : common-requirements
+    : default-build release
     ;
 
 explicit
     [ install dist-bin
         : build//inspect/<link>static
-        : <install-type>EXE <location>$(DIST_DIR)/bin
-        : release ]
+        : <install-type>EXE <location>$(DIST_DIR)/bin ]
     [ alias inspect : build//inspect ]
     [ alias all : inspect dist-bin ]
     ;
