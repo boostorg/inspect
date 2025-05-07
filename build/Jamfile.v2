@@ -6,10 +6,8 @@
 # See http://www.boost.org/LICENSE_1_0.txt
 
 project
-    :
-    requirements
-    :
-    source-location ../src
+    : source-location ../src
+    : default-build release
     ;
 
 exe inspect
@@ -30,9 +28,6 @@ exe inspect
     unnamed_namespace_check.cpp
     /boost/filesystem//boost_filesystem/<link>static
     /boost/regex//boost_regex/<link>static
-    :
-    :
-    release
     ;
 
 # For backwards compatibility with processes that haven't changed to use
