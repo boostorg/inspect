@@ -34,3 +34,7 @@ exe inspect
     :
     release
     ;
+
+# For backwards compatibility with processes that haven't changed to use
+# the top-level install targets.
+explicit [ alias dist-bin : /boost/inspect//dist-bin ] ;
