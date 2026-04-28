@@ -21,11 +21,11 @@ jobs:
             toolset: gcc
           - os: ubuntu-24.04
             toolset: gcc
-          - os: macos-13
-            toolset: clang
           - os: macos-14
             toolset: clang
           - os: macos-15
+            toolset: clang
+          - os: macos-26
             toolset: clang
 
     runs-on: ${{matrix.os}}
@@ -36,7 +36,7 @@ jobs:
         shell: bash
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup container environment
         if: matrix.container
@@ -84,19 +84,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - toolset: msvc-14.0
-            os: windows-2019
-          - toolset: msvc-14.2
-            os: windows-2019
           - toolset: msvc-14.3
             os: windows-2022
+          - toolset: msvc-14.5
+            os: windows-2025-vs2026
+          - toolset: clang-win
+            os: windows-latest
           - toolset: gcc
-            os: windows-2019
+            os: windows-latest
 
     runs-on: ${{matrix.os}}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup Boost
         shell: cmd
